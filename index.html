@@ -260,111 +260,6 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-Untitled" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2019/07/28/Untitled/" class="article-date">
-      <time datetime="2019-07-28T03:34:00.000Z" itemprop="datePublished">2019-07-28</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/28/Untitled/">machine-martrix实战</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="Machine-Matrix渗透"><a href="#Machine-Matrix渗透" class="headerlink" title="Machine_Matrix渗透"></a>Machine_Matrix渗透</h1><p>Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话</p>
-<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p><code>netdiscover -r 192.168.1.0/24</code></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-1.png" alt="upload successful"></p>
-<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>靶机IP：192.168.8.102</p>
-<p>nmap全端口扫</p>
-<p><code>nmap -sS -Pn -A -p- -n 192.168.1.102</code></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-2.png" alt="upload successful"></p>
-<h3 id="web信息收集"><a href="#web信息收集" class="headerlink" title="web信息收集"></a>web信息收集</h3><p>一般一些莫名端口都有一些小猫腻</p>
-<p>直接访问：<a href="http://192.168.8.132:31337/" target="_blank" rel="noopener">http://192.168.8.132:31337/</a></p>
-<p>“右键大法”查看源码</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-4.png" alt="upload successful"><br><code>ZWNobyAiVGhlbiB5b3UnbGwgc2VlLCB0aGF0IGl0IGlzIG5vdCB0aGUgc3Bvb24gdGhhdCBiZW5kcywgaXQgaXMgb25seSB5b3Vyc2VsZi4gIiA+IEN5cGhlci5tYXRyaXg=</code><br>拿去base64解码为：</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-5.png" alt="upload successful"></p>
-<p>访问<a href="http://192.168.8.132:31337/Cypher.matrix，直接down下一个" target="_blank" rel="noopener">http://192.168.8.132:31337/Cypher.matrix，直接down下一个</a> Cypher.matrix文件</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-7.png" alt="upload successful"></p>
-<p>百度下说是BF码（brainfuck）<br>拿去<a href="https://www.splitbrain.org/services/ook在线解码为：" target="_blank" rel="noopener">https://www.splitbrain.org/services/ook在线解码为：</a></p>
-<p><code>You can enter into matrix as guest, with password k1ll0rXX
-Note: Actually, I forget last two characters so I have replaced with XX try your luck and find correct string of password.</code></p>
-<p>全文翻译过来的意思就是“用guest登录，密码为k1ll0rXX，后两位要枚举破解”<br>pydictor字典生成<br>生成以“k1ll0r”为前缀，后缀任意两位的字典列表</p>
-<p>以下介绍一款黑客字典生成器pydictor，</p>
-<p>git地址：<a href="https://github.com/LandGrey/pydictor" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor</a></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-8.png" alt="upload successful"></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-9.png" alt="upload successful"></p>
-<h3 id="hydra爆破登录"><a href="#hydra爆破登录" class="headerlink" title="hydra爆破登录"></a>hydra爆破登录</h3><p>以“guest”为账号，用hydra进行爆破登录ssh</p>
-<p> <code>hydra -l guest -P base_102249.txt ssh://192.168.1.102</code></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-18.png" alt="upload successful"></p>
-<p>爆破成功，密码：k1ll0r7n</p>
-<h3 id="绕过rbash提权"><a href="#绕过rbash提权" class="headerlink" title="绕过rbash提权"></a>绕过rbash提权</h3><p>ssh <a href="mailto:guest@192.168.8.102" target="_blank" rel="noopener">guest@192.168.8.102</a></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-10.png" alt="upload successful"></p>
-<p>以guest登录后，发现很多命令（cd、ls、/、id、python等）没法使用</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-11.png" alt="upload successful"></p>
-<p>如果bash以rbash名称启动，或者启动时使用了-r选项，那么它成为受限的 shell即Restricted Shell。 受限的 shell 一般用来建立一个比标准的 shell 受到更多控制的环境，与一般标准shell的区别在于会限制执行一些行为</p>
-<p>如今网络安全行业越来越规范，我们还想直接获取到未限制的shell是件很困难的事情，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令。</p>
-<p>但意外的是发现vi和 export命令可以使用</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-12.png" alt="upload successful"></p>
-<p>export命令用于设置或显示环境变量，在shell中执行程序时，shell会提供一组环境变量，export可新增，修改或删除环境变量<br>在vi编辑器中，输入</p>
-<p><code>!/bin/bash</code></p>
-<p>将/bin/bash导出到shell环境变量，<br>将/usr/bin目录导出到PATH环境变量：</p>
-<p><code>export SHELL=/bin/bash:$SHELL</code></p>
-<p><code>export PATH=/usr/bin:$PATH</code></p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-13.png" alt="upload successful"><br>进入root文件夹下读取flag，sudo su没法执行,</p>
-<p>再将/bin导出到PATH环境变量中</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-14.png" alt="upload successful"></p>
-<p><code>export PATH=/bin:$PATH</code><br>14</p>
-<p>提权成功，get flag！！！</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-15.png" alt="upload successful"></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>1、渗透过程中要非常敏感高位端口，如本靶机的31337端口</p>
-<p>2、熟练解码、爆破等</p>
-<p>3、提权在本靶机会比较新颖，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令，如rbash；发现了echo、vi和export命令可用，便能用/bin/bash 环境变量绕过rbash提权</p>
-<p>4记得之前在solidstate也遇到过rbash,当时靶机有python环境，可以考虑如下绕过方式</p>
-<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-17.png" alt="upload successful"><br>不过这个靶机也限制了python!!</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Untitled-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -444,6 +339,111 @@ Note: Actually, I forget last two characters so I have replaced with XX try your
 <p>3、提权在本靶机会比较新颖，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令，如rbash；发现了echo、vi和export命令可用，便能用/bin/bash 环境变量绕过rbash提权</p>
 <p>4记得之前在solidstate也遇到过rbash,当时靶机有python环境，可以考虑如下绕过方式</p>
 <p><img src="//yoursite.com/2019/07/28/Untitled-1/%5Cimages%5Cpasted-17.png" alt="upload successful"><br>不过这个靶机也限制了python!!</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Untitled" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/07/28/Untitled/" class="article-date">
+      <time datetime="2019-07-28T03:34:00.000Z" itemprop="datePublished">2019-07-28</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/28/Untitled/">machine-martrix实战</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Machine-Matrix渗透"><a href="#Machine-Matrix渗透" class="headerlink" title="Machine_Matrix渗透"></a>Machine_Matrix渗透</h1><p>Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话</p>
+<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p><code>netdiscover -r 192.168.1.0/24</code></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-1.png" alt="upload successful"></p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>靶机IP：192.168.8.102</p>
+<p>nmap全端口扫</p>
+<p><code>nmap -sS -Pn -A -p- -n 192.168.1.102</code></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-2.png" alt="upload successful"></p>
+<h3 id="web信息收集"><a href="#web信息收集" class="headerlink" title="web信息收集"></a>web信息收集</h3><p>一般一些莫名端口都有一些小猫腻</p>
+<p>直接访问：<a href="http://192.168.8.132:31337/" target="_blank" rel="noopener">http://192.168.8.132:31337/</a></p>
+<p>“右键大法”查看源码</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-4.png" alt="upload successful"><br><code>ZWNobyAiVGhlbiB5b3UnbGwgc2VlLCB0aGF0IGl0IGlzIG5vdCB0aGUgc3Bvb24gdGhhdCBiZW5kcywgaXQgaXMgb25seSB5b3Vyc2VsZi4gIiA+IEN5cGhlci5tYXRyaXg=</code><br>拿去base64解码为：</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-5.png" alt="upload successful"></p>
+<p>访问<a href="http://192.168.8.132:31337/Cypher.matrix，直接down下一个" target="_blank" rel="noopener">http://192.168.8.132:31337/Cypher.matrix，直接down下一个</a> Cypher.matrix文件</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-7.png" alt="upload successful"></p>
+<p>百度下说是BF码（brainfuck）<br>拿去<a href="https://www.splitbrain.org/services/ook在线解码为：" target="_blank" rel="noopener">https://www.splitbrain.org/services/ook在线解码为：</a></p>
+<p><code>You can enter into matrix as guest, with password k1ll0rXX
+Note: Actually, I forget last two characters so I have replaced with XX try your luck and find correct string of password.</code></p>
+<p>全文翻译过来的意思就是“用guest登录，密码为k1ll0rXX，后两位要枚举破解”<br>pydictor字典生成<br>生成以“k1ll0r”为前缀，后缀任意两位的字典列表</p>
+<p>以下介绍一款黑客字典生成器pydictor，</p>
+<p>git地址：<a href="https://github.com/LandGrey/pydictor" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor</a></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-8.png" alt="upload successful"></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-9.png" alt="upload successful"></p>
+<h3 id="hydra爆破登录"><a href="#hydra爆破登录" class="headerlink" title="hydra爆破登录"></a>hydra爆破登录</h3><p>以“guest”为账号，用hydra进行爆破登录ssh</p>
+<p> <code>hydra -l guest -P base_102249.txt ssh://192.168.1.102</code></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-18.png" alt="upload successful"></p>
+<p>爆破成功，密码：k1ll0r7n</p>
+<h3 id="绕过rbash提权"><a href="#绕过rbash提权" class="headerlink" title="绕过rbash提权"></a>绕过rbash提权</h3><p>ssh <a href="mailto:guest@192.168.8.102" target="_blank" rel="noopener">guest@192.168.8.102</a></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-10.png" alt="upload successful"></p>
+<p>以guest登录后，发现很多命令（cd、ls、/、id、python等）没法使用</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-11.png" alt="upload successful"></p>
+<p>如果bash以rbash名称启动，或者启动时使用了-r选项，那么它成为受限的 shell即Restricted Shell。 受限的 shell 一般用来建立一个比标准的 shell 受到更多控制的环境，与一般标准shell的区别在于会限制执行一些行为</p>
+<p>如今网络安全行业越来越规范，我们还想直接获取到未限制的shell是件很困难的事情，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令。</p>
+<p>但意外的是发现vi和 export命令可以使用</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-12.png" alt="upload successful"></p>
+<p>export命令用于设置或显示环境变量，在shell中执行程序时，shell会提供一组环境变量，export可新增，修改或删除环境变量<br>在vi编辑器中，输入</p>
+<p><code>!/bin/bash</code></p>
+<p>将/bin/bash导出到shell环境变量，<br>将/usr/bin目录导出到PATH环境变量：</p>
+<p><code>export SHELL=/bin/bash:$SHELL</code></p>
+<p><code>export PATH=/usr/bin:$PATH</code></p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-13.png" alt="upload successful"><br>进入root文件夹下读取flag，sudo su没法执行,</p>
+<p>再将/bin导出到PATH环境变量中</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-14.png" alt="upload successful"></p>
+<p><code>export PATH=/bin:$PATH</code><br>14</p>
+<p>提权成功，get flag！！！</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-15.png" alt="upload successful"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>1、渗透过程中要非常敏感高位端口，如本靶机的31337端口</p>
+<p>2、熟练解码、爆破等</p>
+<p>3、提权在本靶机会比较新颖，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令，如rbash；发现了echo、vi和export命令可用，便能用/bin/bash 环境变量绕过rbash提权</p>
+<p>4记得之前在solidstate也遇到过rbash,当时靶机有python环境，可以考虑如下绕过方式</p>
+<p><img src="//yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-17.png" alt="upload successful"><br>不过这个靶机也限制了python!!</p>
 
       
     </div>
