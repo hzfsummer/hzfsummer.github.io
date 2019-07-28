@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://yoursite.com/images/pasted-14.png">
 <meta property="og:image" content="http://yoursite.com/images/pasted-15.png">
 <meta property="og:image" content="http://yoursite.com/images/pasted-17.png">
-<meta property="og:updated_time" content="2019-07-28T05:31:19.156Z">
+<meta property="og:updated_time" content="2019-07-28T07:40:05.864Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="machine-martrix实战">
 <meta name="twitter:description" content="Machine_Matrix渗透Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话 主机发现netdiscover -r 192.168.1.0/24  信息收集靶机IP：192.168.8.102 nmap全端口扫 nmap -sS -Pn -A -p- -n 192.168.1.102  web信息收集一般一些莫名端口都有一些小猫腻 直接访问：http://192.16">
@@ -317,11 +317,11 @@
 <p><code>nmap -sS -Pn -A -p- -n 192.168.1.102</code></p>
 <p><img src="/images/pasted-2.png" alt="upload successful"></p>
 <h3 id="web信息收集"><a href="#web信息收集" class="headerlink" title="web信息收集"></a>web信息收集</h3><p>一般一些莫名端口都有一些小猫腻</p>
-<p>直接访问：<a href="http://192.168.8.132:31337/" target="_blank" rel="noopener">http://192.168.8.132:31337/</a></p>
+<p>直接访问：<a href="http://192.168.1.102:31337/" target="_blank" rel="noopener">http://192.168.1.102:31337/</a></p>
 <p>“右键大法”查看源码</p>
 <p><img src="/images/pasted-4.png" alt="upload successful"><br><code>ZWNobyAiVGhlbiB5b3UnbGwgc2VlLCB0aGF0IGl0IGlzIG5vdCB0aGUgc3Bvb24gdGhhdCBiZW5kcywgaXQgaXMgb25seSB5b3Vyc2VsZi4gIiA+IEN5cGhlci5tYXRyaXg=</code><br>拿去base64解码为：</p>
 <p><img src="/images/pasted-5.png" alt="upload successful"></p>
-<p>访问<a href="http://192.168.8.132:31337/Cypher.matrix，直接down下一个" target="_blank" rel="noopener">http://192.168.8.132:31337/Cypher.matrix，直接down下一个</a> Cypher.matrix文件</p>
+<p>访问<a href="http://192.168.1.102:31337/Cypher.matrix，直接down下一个" target="_blank" rel="noopener">http://192.168.1.102:31337/Cypher.matrix，直接down下一个</a> Cypher.matrix文件</p>
 <p><img src="/images/pasted-7.png" alt="upload successful"></p>
 <p>百度下说是BF码（brainfuck）<br>拿去<a href="https://www.splitbrain.org/services/ook在线解码为：" target="_blank" rel="noopener">https://www.splitbrain.org/services/ook在线解码为：</a></p>
 <p><code>You can enter into matrix as guest, with password k1ll0rXX
@@ -370,7 +370,7 @@ Note: Actually, I forget last two characters so I have replaced with XX try your
         <p><span>本文标题:</span><a href="/2019/07/28/Untitled/">machine-martrix实战</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">John Doe</a></p>
         <p><span>发布时间:</span>2019-07-28, 11:34:00</p>
-        <p><span>最后更新:</span>2019-07-28, 13:31:19</p>
+        <p><span>最后更新:</span>2019-07-28, 15:40:05</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2019/07/28/Untitled/" title="machine-martrix实战">http://yoursite.com/2019/07/28/Untitled/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/07/28/Untitled/　　作者: John Doe" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
