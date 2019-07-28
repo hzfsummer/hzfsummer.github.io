@@ -15,17 +15,33 @@
 
 
 
-<meta name="description" content="前置知识//通过这条语句可以得到所有的数据库名selcet schema from information_schema.schemata limit 0,1 //通过这条语句可以得到所有的数据表名 select table_name from information_schema.table where table_name=’security’ //通过这条语句可以得到所有的列名 select">
+<meta name="description" content="Machine_Matrix渗透Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话 主机发现netdiscover -r 192.168.1.0/24  信息收集靶机IP：192.168.8.102 nmap全端口扫 nmap -sS -Pn -A -p- -n 192.168.1.102  web信息收集一般一些莫名端口都有一些小猫腻 直接访问：http://192.16">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql注入详解">
-<meta property="og:url" content="http://yoursite.com/2019/07/28/sql注入详解/index.html">
+<meta property="og:title" content="machine-martrix实战">
+<meta property="og:url" content="http://yoursite.com/2019/07/28/Untitled/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="前置知识//通过这条语句可以得到所有的数据库名selcet schema from information_schema.schemata limit 0,1 //通过这条语句可以得到所有的数据表名 select table_name from information_schema.table where table_name=’security’ //通过这条语句可以得到所有的列名 select">
+<meta property="og:description" content="Machine_Matrix渗透Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话 主机发现netdiscover -r 192.168.1.0/24  信息收集靶机IP：192.168.8.102 nmap全端口扫 nmap -sS -Pn -A -p- -n 192.168.1.102  web信息收集一般一些莫名端口都有一些小猫腻 直接访问：http://192.16">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-28T01:19:45.639Z">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-1.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-2.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-4.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-5.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-7.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-8.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-9.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-18.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-10.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-11.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-12.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-13.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-14.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-15.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-17.png">
+<meta property="og:updated_time" content="2019-07-28T04:32:08.475Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql注入详解">
-<meta name="twitter:description" content="前置知识//通过这条语句可以得到所有的数据库名selcet schema from information_schema.schemata limit 0,1 //通过这条语句可以得到所有的数据表名 select table_name from information_schema.table where table_name=’security’ //通过这条语句可以得到所有的列名 select">
+<meta name="twitter:title" content="machine-martrix实战">
+<meta name="twitter:description" content="Machine_Matrix渗透Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话 主机发现netdiscover -r 192.168.1.0/24  信息收集靶机IP：192.168.8.102 nmap全端口扫 nmap -sS -Pn -A -p- -n 192.168.1.102  web信息收集一般一些莫名端口都有一些小猫腻 直接访问：http://192.16">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/28/Untitled/%5Cimages%5Cpasted-1.png">
 
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
@@ -57,7 +73,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>sql注入详解 | Hexo</title>
+<title>machine-martrix实战 | Hexo</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -257,11 +273,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-sql注入详解" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Untitled" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2019/07/28/sql注入详解/" class="article-date">
-      <time datetime="2019-07-28T01:15:49.000Z" itemprop="datePublished">2019-07-28</time>
+      <a href="/2019/07/28/Untitled/" class="article-date">
+      <time datetime="2019-07-28T03:34:24.000Z" itemprop="datePublished">2019-07-28</time>
 </a>
 
 
@@ -276,7 +292,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      sql注入详解
+      machine-martrix实战
     </h1>
   
 
@@ -293,63 +309,57 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><p>//通过这条语句可以得到所有的数据库名<br>selcet schema from information_schema.schemata limit 0,1</p>
-<p>//通过这条语句可以得到所有的数据表名</p>
-<p>select table_name from information_schema.table where table_name=’security’</p>
-<p>//通过这条语句可以得到所有的列名</p>
-<p>select column_name from information_schema.column limit 0,1</p>
-<p>//通过这条语句可以得到指定数据库security中的数据表Users的所有列名</p>
-<p>select coulmn_name from information_schema.column where table_schema =’security’ and<br>table_name=’users’ limit 0,1</p>
-<p>//mysql中比较常用的一些函数</p>
-<p> version(): 查询数据库的版本</p>
-<p> user():查询数据库的使用者</p>
-<p> database():数据库</p>
-<p> system_user():系统用户名</p>
-<p> session_user():连接数据库的用户名</p>
-<p> curren_user:当前用户名</p>
-<p> load_file():读取本地文件</p>
-<p> @@datadir: 读取数据库路径</p>
-<p> @@version_complie_os:查看操作系统</p>
-<p> @@basedir:mysql安装路径</p>
-<p> ascii(str):返回给定字符的ascii值，如果str是空字符串，返回0；如果str是NUll,返回NULL</p>
-<p> length():返回给定字符串的长度</p>
-<p> substr(string,start,length):对于给定字符串string,从start位开始截取，截取length长度</p>
-<p> substr()\stbstring()\mid()三个函数的用法一致</p>
-<p> concat(username):将查询到的username连在一起，默认用逗号分隔</p>
-<p> concat(str1,”*”,str2):将字符串str1和str2的数据查询在一起，中间用*连接</p>
-<p> group_concat(username):将username数据查询在一起，用逗号连接</p>
-<p> limit n,1:查询第n+1个数</p>
-<h1 id="判断是否存在sql注入"><a href="#判断是否存在sql注入" class="headerlink" title="判断是否存在sql注入"></a>判断是否存在sql注入</h1><p> 工具查询</p>
-<p> 手工查询：二话不说，先加单引号，双引号，单双括号看看是否报错</p>
-<p> and 1=1 and 1=2 是否显示并不一样<br> 一。。。。。。。。。。。布尔盲注<br> 盲注一般用到的函数有：</p>
-<p> ascii(),substr(),length(),exsits(),concat()<br> 1:判断数据库类型</p>
-<p> mysql特有的表是information_schema.tables,</p>
-<p> access数据库特有的表是msyobjects,sqlserver特有的表sysobjects.接下来，我们可以用以下的语句判断数据库。<br> //判断是否是mysql数据库</p>
-<p> ?id=1’ and exists(select*from information_schema.tables)#</p>
-<p> 同理判断其他 修改特殊表的表名</p>
-<p> 下面对常用字段进行介绍</p>
-<p> table_schema:记录数据库名</p>
-<p> table_name:记录表名</p>
-<p> table_rows:关于表的粗略行估计</p>
-<p> data length:记录表的大小（单位字节）</p>
-<h1 id="2：判断当前数据库名（以下方法不适用acess和sql-server"><a href="#2：判断当前数据库名（以下方法不适用acess和sql-server" class="headerlink" title="2：判断当前数据库名（以下方法不适用acess和sql server)"></a>2：判断当前数据库名（以下方法不适用acess和sql server)</h1><p> —1:判断当前数据库的长度，利用二分法</p>
-<p> ?id=1’and length(database())&gt;5 //正常显示</p>
-<p> ?id=1’and length(database())&gt;10//不显示任何数据</p>
-<blockquote>
-<p>7 //正常显示  &gt;8不显示任何数据<br> 故数据库长度位8<br> –2：判断数据库的第一个字符<br> ?id=1’ and ascii(substr(database()),1,1))&gt;100<br> //第二个字符<br> ?id=1’ and ascii(substr(database()),2,1))&gt;100<br> 。。。。。。。。。。。。。</p>
-</blockquote>
-<h1 id="3-判断数据库中的表"><a href="#3-判断数据库中的表" class="headerlink" title="3:判断数据库中的表"></a>3:判断数据库中的表</h1><h3 id="判断当前数据库中表的个数"><a href="#判断当前数据库中表的个数" class="headerlink" title="判断当前数据库中表的个数"></a>判断当前数据库中表的个数</h3><p> //判断当前数据库中表的个数是否大于5，用二分法依次判断，</p>
-<blockquote>
-<p>id’ and (selct count(table_name)  from information_schema.table where table_schema=database())&gt;5</p>
-</blockquote>
-<h3 id="判断每个表的长度"><a href="#判断每个表的长度" class="headerlink" title="判断每个表的长度"></a>判断每个表的长度</h3><p> id=1’ and length((select table_name from information_schema.tables where table_schema=database() limit 0,1))=6</p>
-<p> 判断第二个表的长度</p>
-<p>  id=1’ and length((select table_name from information_schema.tables where table_schema=database() limit 1,1))=6</p>
-<h3 id="判断每个表的每个字符的ascii值"><a href="#判断每个表的每个字符的ascii值" class="headerlink" title="判断每个表的每个字符的ascii值"></a>判断每个表的每个字符的ascii值</h3><p>  ?id=1’ and ascii(substr((select table_name from information_schema.tables where table_name=database() limit(0,1),1,1))&gt;100</p>
-<p>  第二个字符</p>
-<p>  ?id=1’ and ascii(substr((select table_name from information_schema.tables where table_name=database() limit(0,1),2,1))&gt;100</p>
-<p>  4.判断表中的字段<br>  pass::</p>
-<h1 id="二：union注入"><a href="#二：union注入" class="headerlink" title="二：union注入"></a>二：union注入</h1>
+        <h1 id="Machine-Matrix渗透"><a href="#Machine-Matrix渗透" class="headerlink" title="Machine_Matrix渗透"></a>Machine_Matrix渗透</h1><p>Matrix——这名字取得很黑客，该靶机中的很多语句确实是黑客帝国中的原话</p>
+<h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p><code>netdiscover -r 192.168.1.0/24</code></p>
+<p><img src="%5Cimages%5Cpasted-1.png" alt="upload successful"></p>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>靶机IP：192.168.8.102</p>
+<p>nmap全端口扫</p>
+<p><code>nmap -sS -Pn -A -p- -n 192.168.1.102</code></p>
+<p><img src="%5Cimages%5Cpasted-2.png" alt="upload successful"></p>
+<h3 id="web信息收集"><a href="#web信息收集" class="headerlink" title="web信息收集"></a>web信息收集</h3><p>一般一些莫名端口都有一些小猫腻</p>
+<p>直接访问：<a href="http://192.168.8.132:31337/" target="_blank" rel="noopener">http://192.168.8.132:31337/</a></p>
+<p>“右键大法”查看源码</p>
+<p><img src="%5Cimages%5Cpasted-4.png" alt="upload successful"><br><code>ZWNobyAiVGhlbiB5b3UnbGwgc2VlLCB0aGF0IGl0IGlzIG5vdCB0aGUgc3Bvb24gdGhhdCBiZW5kcywgaXQgaXMgb25seSB5b3Vyc2VsZi4gIiA+IEN5cGhlci5tYXRyaXg=</code><br>拿去base64解码为：</p>
+<p><img src="%5Cimages%5Cpasted-5.png" alt="upload successful"></p>
+<p>访问<a href="http://192.168.8.132:31337/Cypher.matrix，直接down下一个" target="_blank" rel="noopener">http://192.168.8.132:31337/Cypher.matrix，直接down下一个</a> Cypher.matrix文件</p>
+<p><img src="%5Cimages%5Cpasted-7.png" alt="upload successful"></p>
+<p>百度下说是BF码（brainfuck）<br>拿去<a href="https://www.splitbrain.org/services/ook在线解码为：" target="_blank" rel="noopener">https://www.splitbrain.org/services/ook在线解码为：</a></p>
+<p><code>You can enter into matrix as guest, with password k1ll0rXX
+Note: Actually, I forget last two characters so I have replaced with XX try your luck and find correct string of password.</code></p>
+<p>全文翻译过来的意思就是“用guest登录，密码为k1ll0rXX，后两位要枚举破解”<br>pydictor字典生成<br>生成以“k1ll0r”为前缀，后缀任意两位的字典列表</p>
+<p>以下介绍一款黑客字典生成器pydictor，</p>
+<p>git地址：<a href="https://github.com/LandGrey/pydictor" target="_blank" rel="noopener">https://github.com/LandGrey/pydictor</a></p>
+<p><img src="%5Cimages%5Cpasted-8.png" alt="upload successful"></p>
+<p><img src="%5Cimages%5Cpasted-9.png" alt="upload successful"></p>
+<h3 id="hydra爆破登录"><a href="#hydra爆破登录" class="headerlink" title="hydra爆破登录"></a>hydra爆破登录</h3><p>以“guest”为账号，用hydra进行爆破登录ssh</p>
+<p> <code>hydra -l guest -P base_102249.txt ssh://192.168.1.102</code></p>
+<p><img src="%5Cimages%5Cpasted-18.png" alt="upload successful"></p>
+<p>爆破成功，密码：k1ll0r7n</p>
+<h3 id="绕过rbash提权"><a href="#绕过rbash提权" class="headerlink" title="绕过rbash提权"></a>绕过rbash提权</h3><p>ssh <a href="mailto:guest@192.168.8.102" target="_blank" rel="noopener">guest@192.168.8.102</a></p>
+<p><img src="%5Cimages%5Cpasted-10.png" alt="upload successful"></p>
+<p>以guest登录后，发现很多命令（cd、ls、/、id、python等）没法使用</p>
+<p><img src="%5Cimages%5Cpasted-11.png" alt="upload successful"></p>
+<p>如果bash以rbash名称启动，或者启动时使用了-r选项，那么它成为受限的 shell即Restricted Shell。 受限的 shell 一般用来建立一个比标准的 shell 受到更多控制的环境，与一般标准shell的区别在于会限制执行一些行为</p>
+<p>如今网络安全行业越来越规范，我们还想直接获取到未限制的shell是件很困难的事情，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令。</p>
+<p>但意外的是发现vi和 export命令可以使用</p>
+<p><img src="%5Cimages%5Cpasted-12.png" alt="upload successful"></p>
+<p>export命令用于设置或显示环境变量，在shell中执行程序时，shell会提供一组环境变量，export可新增，修改或删除环境变量<br>在vi编辑器中，输入</p>
+<p><code>!/bin/bash</code></p>
+<p>将/bin/bash导出到shell环境变量，<br>将/usr/bin目录导出到PATH环境变量：</p>
+<p><code>export SHELL=/bin/bash:$SHELL</code></p>
+<p><code>export PATH=/usr/bin:$PATH</code></p>
+<p><img src="%5Cimages%5Cpasted-13.png" alt="upload successful"><br>进入root文件夹下读取flag，sudo su没法执行,</p>
+<p>再将/bin导出到PATH环境变量中</p>
+<p><img src="%5Cimages%5Cpasted-14.png" alt="upload successful"></p>
+<p><code>export PATH=/bin:$PATH</code><br>14</p>
+<p>提权成功，get flag！！！</p>
+<p><img src="%5Cimages%5Cpasted-15.png" alt="upload successful"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>1、渗透过程中要非常敏感高位端口，如本靶机的31337端口</p>
+<p>2、熟练解码、爆破等</p>
+<p>3、提权在本靶机会比较新颖，系统运维人员一般都会给Linux shell加上一些限制来防止入侵，通常会阻止运行某些特定的命令，如rbash；发现了echo、vi和export命令可用，便能用/bin/bash 环境变量绕过rbash提权</p>
+<p>4记得之前在solidstate也遇到过rbash,当时靶机有python环境，可以考虑如下绕过方式</p>
+<p><img src="%5Cimages%5Cpasted-17.png" alt="upload successful"><br>不过这个靶机也限制了python!!</p>
+
       
     </div>
     
@@ -357,13 +367,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2019/07/28/sql注入详解/">sql注入详解</a></p>
+        <p><span>本文标题:</span><a href="/2019/07/28/Untitled/">machine-martrix实战</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">John Doe</a></p>
-        <p><span>发布时间:</span>2019-07-28, 09:15:49</p>
-        <p><span>最后更新:</span>2019-07-28, 09:19:45</p>
+        <p><span>发布时间:</span>2019-07-28, 11:34:24</p>
+        <p><span>最后更新:</span>2019-07-28, 12:32:08</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2019/07/28/sql注入详解/" title="sql注入详解">http://yoursite.com/2019/07/28/sql注入详解/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/07/28/sql注入详解/　　作者: John Doe" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/07/28/Untitled/" title="machine-martrix实战">http://yoursite.com/2019/07/28/Untitled/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/07/28/Untitled/　　作者: John Doe" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -375,16 +385,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2019/07/28/Untitled/">
-                    machine-martrix实战
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2019/07/28/php常见漏洞-ctf/">
-                    php常见漏洞-ctf
+                <a href="/2019/07/28/sql注入详解/">
+                    sql注入详解
                 </a>
             </div>
         
@@ -396,7 +400,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#判断是否存在sql注入"><span class="toc-number">2.</span> <span class="toc-text">判断是否存在sql注入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2：判断当前数据库名（以下方法不适用acess和sql-server"><span class="toc-number">3.</span> <span class="toc-text">2：判断当前数据库名（以下方法不适用acess和sql server)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-判断数据库中的表"><span class="toc-number">4.</span> <span class="toc-text">3:判断数据库中的表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#判断当前数据库中表的个数"><span class="toc-number">4.0.1.</span> <span class="toc-text">判断当前数据库中表的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断每个表的长度"><span class="toc-number">4.0.2.</span> <span class="toc-text">判断每个表的长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断每个表的每个字符的ascii值"><span class="toc-number">4.0.3.</span> <span class="toc-text">判断每个表的每个字符的ascii值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二：union注入"><span class="toc-number">5.</span> <span class="toc-text">二：union注入</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Machine-Matrix渗透"><span class="toc-number">1.</span> <span class="toc-text">Machine_Matrix渗透</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主机发现"><span class="toc-number">1.0.1.</span> <span class="toc-text">主机发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息收集"><span class="toc-number">1.0.2.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web信息收集"><span class="toc-number">1.0.3.</span> <span class="toc-text">web信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hydra爆破登录"><span class="toc-number">1.0.4.</span> <span class="toc-text">hydra爆破登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绕过rbash提权"><span class="toc-number">1.0.5.</span> <span class="toc-text">绕过rbash提权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">1.0.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li></ol>
         
     </div>
     <style>
@@ -432,7 +436,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"sql注入详解　| Hexo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"machine-martrix实战　| Hexo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -466,15 +470,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2019/07/28/Untitled/" title="上一篇: machine-martrix实战">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2019/07/28/php常见漏洞-ctf/" title="下一篇: php常见漏洞-ctf">
+            <a href="/2019/07/28/sql注入详解/" title="下一篇: sql注入详解">
                 <i class="fa fa-angle-right"></i>
             </a>
         
